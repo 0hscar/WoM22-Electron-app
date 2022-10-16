@@ -18,5 +18,10 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^21.1.1"
+  },
+  "dependencies": {
+    "electron-fetch": "^1.9.1",
+    "mysql": "^2.18.1",
+    "postgres": "^3.3.1"
   }
 }

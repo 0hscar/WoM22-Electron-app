@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
+const fetch = require('electron-fetch').default
 
 function createWindow (pageName) {
   // Create the browser window.
@@ -9,7 +10,7 @@ function createWindow (pageName) {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'), nodeIntegration: true, contextIsolation: false, allowRunningInsecureContent: true, enableBlinkFeatures: 'ExecCommandInJavaScript'
     }
   })
 
@@ -17,7 +18,7 @@ function createWindow (pageName) {
   mainWindow.loadFile(pageName)
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -40,6 +41,15 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+
+
+
+
+
+
+
+
 
 
 
