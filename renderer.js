@@ -8,6 +8,8 @@
 
 
 
+
+
 var cabinButton = document.getElementById('cabinClick')
 var servicesButton = document.getElementById('servicesClick')
 var bothButton = document.getElementById('bothClick')
@@ -29,11 +31,15 @@ function showCabin(){
     document.querySelector('#cabins').style.display = "block"
     document.querySelector('#services').style.display = "none"
 
+
+
 }
 
 function showServices(){
     document.querySelector('#services').style.display = "block"
     document.querySelector('#cabins').style.display = "none"
+    
+
 
 }
 
@@ -43,3 +49,8 @@ function showBoth(){
     
     
 }
+
+
+
+
+

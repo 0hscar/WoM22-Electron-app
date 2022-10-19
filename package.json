@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "electron-fetch": "^1.9.1",
+    "json": "^11.0.0",
     "mysql": "^2.18.1",
     "postgres": "^3.3.1"
   }
