@@ -21,6 +21,9 @@
   },
   "dependencies": {
     "electron-fetch": "^1.9.1",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.6.0",
     "json": "^11.0.0",
     "mysql": "^2.18.1",
     "postgres": "^3.3.1"

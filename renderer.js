@@ -6,6 +6,9 @@
  * to expose Node.js functionality from the main process.
  */
 
+const { ipcRenderer } = require("electron")
+const { main } = require("json")
+
 
 
 
@@ -16,6 +19,7 @@ var bothButton = document.getElementById('bothClick')
 
 bothButton.addEventListener('click', (event) => {
     showBoth()
+    
 })
 servicesButton.addEventListener('click', (event) => {
     showServices()
@@ -25,13 +29,25 @@ cabinButton.addEventListener('click', (event) => {
 })
 
 
+async function getServices(){
+    servicelist = []
+
+    const services = await window.Electron.getServices()
+
+    options =""
+    for (i=0; i<services.Electron;i++){
+        options += "<option value="+services[i].id+">"+services[i].service+"</option"
+    }
+    return options
+}
+
+
+
 
 
 function showCabin(){
     document.querySelector('#cabins').style.display = "block"
     document.querySelector('#services').style.display = "none"
-
-
 
 }
 

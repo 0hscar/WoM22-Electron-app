@@ -1,8 +1,13 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
 const fetch = require('electron-fetch').default
 const json = require('json')
+var { buildSchema } = require('graphql');
+var express = require('express')
+var { graphqlHTTP } = require('express-graphql');
+const { resourceUsage } = require('process');
+
 
 function createWindow (pageName) {
   // Create the browser window.
@@ -44,43 +49,57 @@ app.on('window-all-closed', function () {
 })
 
 
-let dice = 6
-let sides = 6
-
-// fetch('http://localhost:4000/graphql', {
-//   method: 'POST',
-//   headers: {
-//     'Content-type': 'application/json',
-//     'Accept': 'application/json',
-//   },
-//   body: JSON.stringify({
-//     query,
-//     variables: {dice, sides},
-//   })
-// })
-//   .then(r => r.json())
-//   .then(data => console.log('data returned', data))
 
 
 
-  fetch('http://localhost:4000/graphql',{
-    method: 'POST',
+
+let services = "services"
+
+ipcMain.handle('getServices-handler', async (event, data) => {
+  try {
+    const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices', data)
+    services = await response.json()
+    return services
+  } catch (error){
+    return error.message
+  }
+})
+
+
+ipcMain.handle('getCabins-handler', async (event, data) => {
+  try{
+    const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices', data)
+    cabins = await response.json()
+    return cabins
+  } catch (error) {
+    return error.message
+  }
+})
+
+
+
+// Toimiva koncepti
+
+var getAllServices = async function(){
+  const r = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices', {
+    method: 'GET',
     headers: {
-      'Content-type': 'Application/json',
-      'Accept': 'application/json'
+      'Content-type': 'application/json',
+      'x-hasura-admin-secret': 'JbQCUuobnSIqZXdq1ckgFoe5wyRuYTBskozBeNlWOgpeUjkMTVzdNEgPSktSOlSg',
     }
-  })
-  .then(r => r.json())
-  .then(data => console.log('data returned:', data))
+  });
+  const data = await r.json();
+  return console.log('Data: ', data);
+  }
 
-// console.log(fetch('http://localhost:4000/graphql').then(r => r.json))
 
-// async function test(){
-//   await fetch('http://localhost:4000/graphql')
-//   result = await response.json()
-//   console.log(result)
+// getAllServices()
 
-// }
+getAllServices()
+
+
+
+
 
 
 
