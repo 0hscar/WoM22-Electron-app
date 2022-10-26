@@ -7,56 +7,40 @@
  */
 
 
-const { ipcRenderer, contextBridge } = require('electron')
+ const { ipcRenderer, contextBridge } = require('electron')
 
-
-
-window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
-
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
-  }
-})
-
-
-
-
-contextBridge.exposeInMainWorld('electron', {
-
-    
-    
-    login: async (data) => {
-
-        return await ipcRenderer.invoke('login-handler', data)
-    },
-
-    getCabins: async (data) => {
-
-        return await ipcRenderer.invoke('getCabins-handler', data)
-    },
-
-    makeOrder: async (data) => {
-
-        return await ipcRenderer.invoke('makeorder-handler', data)
-    },
-
-    deleteOrder: async (data) => {
-        console.log("Preloading delete order!")
-
-        return await ipcRenderer.invoke('deleteorder-handler', data)
-    },
-
-    getMyOrders: async (data) => {
-
-        return await ipcRenderer.invoke('getmyorders-handler', data)
-    },
-
-    getServices: async (data) => {
-
-        return await ipcRenderer.invoke('getServices-handler', data)
-    }
-})
+ contextBridge.exposeInMainWorld('electron', {
+ 
+     
+     
+     login: async (data) => {
+ 
+         return await ipcRenderer.invoke('login-handler', data)
+     },
+ 
+     getCabins: async (data) => {
+ 
+         return await ipcRenderer.invoke('getcabins-handler', data)
+     },
+ 
+     makeOrder: async (data) => {
+ 
+         return await ipcRenderer.invoke('makeorder-handler', data)
+     },
+ 
+     deleteOrder: async (data) => {
+         console.log("Preloading delete order!")
+ 
+         return await ipcRenderer.invoke('deleteorder-handler', data)
+     },
+ 
+     getOrders: async (data) => {
+ 
+         return await ipcRenderer.invoke('getorders-handler', data)
+     },
+ 
+     getServices: async (data) => {
+ 
+         return await ipcRenderer.invoke('getservices-handler', data)
+     }
+ })

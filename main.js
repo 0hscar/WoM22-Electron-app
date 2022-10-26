@@ -9,97 +9,107 @@ var { graphqlHTTP } = require('express-graphql');
 const { resourceUsage } = require('process');
 
 
-function createWindow (pageName) {
-  // Create the browser window.
-  
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'), nodeIntegration: true, contextIsolation: false, allowRunningInsecureContent: true, enableBlinkFeatures: 'ExecCommandInJavaScript'
-    }
+const createWindow = () => {
+  const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+          preload: path.join(__dirname, 'preload.js')
+      },
+      autoHideMenuBar: true //ALT
   })
 
-  // and load the index.html of the app.
-  mainWindow.loadFile(pageName)
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  win.loadFile(path.join(__dirname, 'login.html'))
+  win.webContents.openDevTools()
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  let pageName = 'login.html'
-  createWindow(pageName)
-
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow(pageName)
-  })
-})
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
-})
+app.on('ready', createWindow)
 
 
-
-
-
-
-let services = "services"
-
-ipcMain.handle('getServices-handler', async (event, data) => {
-  try {
-    const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices', data)
-    services = await response.json()
-    return services
-  } catch (error){
-    return error.message
-  }
-})
-
-
-ipcMain.handle('getCabins-handler', async (event, data) => {
+// Projekt 1 Driftsätningen fungerade inte --> måste skippa log in 
+ipcMain.handle('login-handler', async (event, data) => {
+  
   try{
-    const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices', data)
-    cabins = await response.json()
-    return cabins
+      const response = await fetch("https://weber-wom22-proj1.azurewebsites.net", data)
+      login = await response.json()
+      console.log(login)
+      return login
   } catch (error) {
-    return error.message
+      return error.message
   }
 })
 
-
-
-// Toimiva koncepti
-
-var getAllServices = async function(){
-  const r = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices', {
-    method: 'GET',
-    headers: {
-      'Content-type': 'application/json',
-      'x-hasura-admin-secret': 'JbQCUuobnSIqZXdq1ckgFoe5wyRuYTBskozBeNlWOgpeUjkMTVzdNEgPSktSOlSg',
-    }
-  });
-  const data = await r.json();
-  return console.log('Data: ', data);
+ipcMain.handle('getcabins-handler', async (event, data) => {
+  try{
+          const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getCabins', data)
+      
+          cabins = await response.json()
+          return cabins
+  } catch (error) {
+      return error.message
   }
+})
 
+ipcMain.handle('makeorder-handler', async (event, data) => {
+  console.log("Placing order!")
+  try{
+      // console.log(data)
+      const response = await fetch('https://striking-finch-42.hasura.app/v1/graphql', data)
+      // Har en skild endpoint för delete med premade query men ville inte få variables passed med något annat än POST, Samma för delete av en order
+      order = await response.json()
+      // console.log(order)
+      return order
 
-// getAllServices()
+  } catch (error) {
+      return error.message
+  }
+})
 
-getAllServices()
+ipcMain.handle('deleteorder-handler', async (event, data) => {
+  console.log("Deleting order!")
+  try{
+      // console.log(data)
+      // req = {
+      //     method: 'DELETE',
+      //     header: {
+      //         'Content-type': 'application/json',
+      //         'x-hasura-admin-secret': 'JbQCUuobnSIqZXdq1ckgFoe5wyRuYTBskozBeNlWOgpeUjkMTVzdNEgPSktSOlSg',
+      //     }
+      // }
+      // const response = await fetch('https://striking-finch-42.hasura.app/api/rest/orders/:id=' + data, req)
+      // Olika test för att göra det med en egen endpoint men lyckades inte passa variablerna så blev improvisering
+      const response = await fetch('https://striking-finch-42.hasura.app/v1/graphql', data)
+  
+      order = await response.json()
+      // console.log(order)
+      return order
 
+  } catch (error) {
+      return error.message
+  }
+})
 
+ipcMain.handle('getorders-handler', async (event, data) => {
+  try{
+          const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getOrders', data)
+      
+          orders = await response.json()
+          return orders
+  } catch (error) {
+      return error.message
+  }
+})
 
-
+ipcMain.handle('getservices-handler', async (event, data) => {
+  try{
+          const response = await fetch('https://striking-finch-42.hasura.app/api/rest/getAllServices',data)
+      
+          services = await response.json()
+          return services
+  } catch (error) {
+      return error.message
+  }
+})
 
 
 
