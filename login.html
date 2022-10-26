@@ -2,44 +2,38 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' ">
-    <script src="main.js"></script>
-
-    <link href="./styles.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="./styles.css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
     <title>Cabin Mäklaren 2.0</title>
   </head>
+  
+  
+  
   <body>
-    <h1> Liha e en skum figur </h1>
-      <div class="loginContainer">
-        <h2>Login to Cabin Mäklaren 2.0</h2>
-        <input class="loginInputs" type="text" placeholder="Email"><br/>
-        <input class="loginInputs" type="text" placeholder="Password"><br/>
-        <input type="button" class="inputButton" value="Login">
-      </div>
+    
+    <div class="topDiv">
+        <h2> Cabin Mäklare 2.0</h2>
+            <p id="notloggedin">Log in to see your services (Out of order, already logged in)</p>
 
-      <!-- <div class="float-container"> -->
-       
-        <div id="cabins" class="float-child">
-          <div class="cabinServices">Yeeet</div>
+        <div id="loggedin">
+            <a class="links" onclick="showCabins()">Cabins </a>
+            <a class="links" onclick="showOrders()">Orders </a>
+            <a class="links" onclick="logOut()">Log Out (Out of order) </a>
         </div>
-        
-        <div id="services" class="float-child">
-          <div class="cabinOrderedServices">Deleeete</div>
+        </div>  
+        <div class="text-center" id="login">
+            <input id="user" type="text" placeholder="E-mail"><br><br>
+            <input id="password" type="password" placeholder="Password"><br><br>
+            <button class="btn" id="loginBtn">Log In (Out of order)</button>
+            <br>
+            <div id="loginFail"></div>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-4" id="cabins"></div>
+            <div class="col-sm-8" id="services"></div> 
+            <div class="col-sm-8" id="orders"></div> 
         </div>
-      
-      <!-- </div> -->
-      
-      <button id="cabinClick">Cabin</button>
-      <button id="servicesClick">Services</button>
-      <button id="bothClick">Show both</button>
-
-
-    
-    
-      <!-- You can also require other files to run in this process -->
-    <script src="renderer.js"></script>
-    <script src="login.js"></script>
-    
-  </body>
+    </div>
+    <script src="./renderer.js"></script>
+</body>
 </html>
